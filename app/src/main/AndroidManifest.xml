@@ -29,6 +29,8 @@
         <activity android:name=".ApprenticeActivity"/>
         <activity android:name=".GraphicActivity"/>
         <activity android:name=".Notificaciones"/>
+        <activity android:name=".Perfil_Aprendiz"/>
+        <activity android:name=""/>
     </application>
 
 </manifest>

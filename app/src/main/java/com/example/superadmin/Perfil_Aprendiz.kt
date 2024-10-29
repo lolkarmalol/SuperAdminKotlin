@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -50,76 +51,82 @@ class Perfil_Aprendiz : ComponentActivity() {
         ) {
             HeaderSection()
             NotificationBar()
-            SearchBar()
             MainContent()  // Include this to render the profile content
         }
     }
 
     @Composable
     fun HeaderSection() {
+        val context = LocalContext.current
+
         Row(
             modifier = Modifier
-                .padding(16.dp)
-                .background(Color.White),
-            verticalAlignment = Alignment.Top
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo_sena),
-                contentDescription = "SENA Logo",
-                modifier = Modifier.size(70.dp)
-            )
-
-            Spacer(modifier = Modifier.width(10.dp))
-
-            Column {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painter = painterResource(id = R.drawable.logo_etapaproductiva),
-                        contentDescription = "Etapa Productiva Logo",
-                        modifier = Modifier.size(40.dp)
-                    )
-                    Column {
-                        Text(
-                            "Etapa",
-                            fontSize = 12.sp,
-                            color = Color(0xFF009E00),
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            "Productiva",
-                            fontSize = 12.sp,
-                            color = Color(0xFF009E00),
-                            fontWeight = FontWeight.Bold
-                        )
+                contentDescription = "Logo SENA",
+                modifier = Modifier
+                    .size(70.dp)
+                    .clickable {
+                        val intent = Intent(context, MainActivity::class.java)
+                        context.startActivity(intent)
                     }
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Image(
+                painter = painterResource(id = R.drawable.logo_etapaproductiva),
+                contentDescription = "Logo Etapa Productiva",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable {
+                        val intent = Intent(context, MainActivity::class.java)
+                        context.startActivity(intent)
+                    }
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Column(
+                modifier = Modifier.clickable {
+                    val intent = Intent(context, MainActivity::class.java)
+                    context.startActivity(intent)
                 }
+            ) {
+                androidx.compose.material.Text(
+                    "Etapa\nProductiva",
+                    fontSize = 13.sp,
+                    color = Color(0xFF009E00),
+                    modifier = Modifier
+                        .padding(top = 6.dp)
+                        .offset(x = (-5).dp)
+                )
                 Spacer(modifier = Modifier.height(15.dp))
-                Text("Centro de Comercio y Servicios", fontSize = 14.sp, color = Color(0xFF009E00))
+                androidx.compose.material.Text(
+                    "Centro de Comercio y Servicios",
+                    fontSize = 14.sp,
+                    color = Color(0xFF009E00),
+                    modifier = Modifier.offset(x = (-30).dp)
+                )
             }
-
             Spacer(modifier = Modifier.weight(1f))
-
-            // Imagen de mujer convertida en botón
             Image(
                 painter = painterResource(id = R.drawable.user_icon),
                 contentDescription = "User Icon",
-                modifier = Modifier
-                    .size(45.dp)
-                    .clickable {
-                        // Acción al hacer clic en la imagen (Ej: navegar a otra actividad)
-                        startActivity(Intent(this@Perfil_Aprendiz, "Perfil_instructor"::class.java))
-                    }
+                modifier = Modifier.size(45.dp)
             )
         }
     }
 
     @Composable
     fun NotificationBar() {
+        val context = LocalContext.current // Obtener el contexto local
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(64.dp)
-                .background(Color(0xFF009E00)), // Verde
+                .background(Color(0xFF009E00)),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
@@ -129,34 +136,11 @@ class Perfil_Aprendiz : ComponentActivity() {
                 modifier = Modifier
                     .size(60.dp)
                     .clickable {
-                        // Acción al hacer clic en la imagen (Ej: navegar a otra actividad)
-                        startActivity(Intent(this@Perfil_Aprendiz, "Notificaciones"::class.java)) },
-                colorFilter = ColorFilter.tint(Color.White)
-
+                        // Al hacer clic en el icono de notificaciones, iniciar NotificationActivity
+                        context.startActivity(Intent(context, Notificaciones::class.java))
+                    },
+                colorFilter = ColorFilter.tint(Color.White) // Cambia el color a blanco
             )
-        }
-    }
-    @Composable
-    fun SearchBar() {
-        // Crear un estado mutable para el texto de búsqueda
-        var searchText by remember { mutableStateOf("") }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            IconButton(onClick = { finish() }) {
-                Image(
-                    painter = painterResource(id = R.drawable.flecha),
-                    contentDescription = "Flecha",
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-
-            Spacer(modifier = Modifier.width(2.dp))
-
         }
     }
 
@@ -206,7 +190,6 @@ class Perfil_Aprendiz : ComponentActivity() {
             }
 
             // Dropdown de estado
-            StatusDropdown()
         }
     }
 
@@ -243,40 +226,6 @@ class Perfil_Aprendiz : ComponentActivity() {
         }
     }
 
-    @Composable
-    fun StatusDropdown() {
-        var selectedOption by remember { mutableStateOf("Selecciona Opción") }
-        val options = listOf("ACTIVO", "NOVEDAD", "FINALIZADA")
-        var expanded by remember { mutableStateOf(false) }
-
-        Surface(modifier = Modifier.fillMaxWidth()) {
-            Box(modifier = Modifier.wrapContentSize(Alignment.TopStart)) {
-                Text(
-                    text = selectedOption,
-                    modifier = Modifier
-                        .background(Color.LightGray)
-                        .padding(12.dp)
-                        .fillMaxWidth()
-                        .clickable { expanded = true }
-                )
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    options.forEach { option ->
-                        DropdownMenuItem(
-                            onClick = {
-                                selectedOption = option
-                                expanded = false
-                            }
-                        ) {
-                            Text(text = option)
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     private fun DropdownMenuItem(onClick: () -> Unit, interactionSource: @Composable () -> Unit) {
         TODO("Not yet implemented")

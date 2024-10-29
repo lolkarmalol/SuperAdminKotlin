@@ -72,51 +72,61 @@ class Notificaciones: ComponentActivity() {
             EmailList()
         }
     }
-
     @Composable
     fun HeaderSection() {
+        val context = LocalContext.current
+
         Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.Top // Cambiar a Alignment.Top
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            // Logo SENA
             Image(
                 painter = painterResource(id = R.drawable.logo_sena),
                 contentDescription = "Logo SENA",
-                modifier = Modifier.size(70.dp)
+                modifier = Modifier
+                    .size(70.dp)
+                    .clickable {
+                        val intent = Intent(context, MainActivity::class.java)
+                        context.startActivity(intent)
+                    }
             )
             Spacer(modifier = Modifier.width(10.dp))
-
-            // Logo Etapa Productiva
             Image(
                 painter = painterResource(id = R.drawable.logo_etapaproductiva),
                 contentDescription = "Logo Etapa Productiva",
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable {
+                        val intent = Intent(context, MainActivity::class.java)
+                        context.startActivity(intent)
+                    }
             )
             Spacer(modifier = Modifier.width(8.dp))
-
-            // Textos
-            Column {
+            Column(
+                modifier = Modifier.clickable {
+                    val intent = Intent(context, MainActivity::class.java)
+                    context.startActivity(intent)
+                }
+            ) {
                 androidx.compose.material.Text(
                     "Etapa\nProductiva",
                     fontSize = 13.sp,
                     color = Color(0xFF009E00),
                     modifier = Modifier
-                        .padding(top = 6.dp) // Ajusta la distancia hacia abajo
-                        .offset(x = (-5).dp) // Desplaza el texto hacia la izquierda
+                        .padding(top = 6.dp)
+                        .offset(x = (-5).dp)
                 )
-                Spacer(modifier = Modifier.height(15.dp)) // Espaciador para bajar el texto "Centro de Comercio y Servicios"
+                Spacer(modifier = Modifier.height(15.dp))
                 androidx.compose.material.Text(
                     "Centro de Comercio y Servicios",
                     fontSize = 14.sp,
                     color = Color(0xFF009E00),
-                    modifier = Modifier.offset(x = (-30).dp) // Desplazar 30 dp hacia la izquierda
+                    modifier = Modifier.offset(x = (-30).dp)
                 )
             }
-
-            Spacer(modifier = Modifier.weight(1f)) // Para empujar el icono del usuario a la derecha
-
-            // Icono de usuario
+            Spacer(modifier = Modifier.weight(1f))
             Image(
                 painter = painterResource(id = R.drawable.user_icon),
                 contentDescription = "User Icon",
