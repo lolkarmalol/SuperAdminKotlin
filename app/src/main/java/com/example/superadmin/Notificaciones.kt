@@ -199,7 +199,7 @@ class Notificaciones: ComponentActivity() {
             // Botón de redactar
             IconButton(
                 onClick = { // Acción al hacer clic en la imagen (Ej: navegar a otra actividad)
-                    startActivity(Intent(this@Notificaciones, "Redactar"::class.java)) },
+                    startActivity(Intent(this@Notificaciones, Redactar::class.java)) },
                 modifier = Modifier.size(25.dp) // Tamaño del icono
             ) {
                 Image(

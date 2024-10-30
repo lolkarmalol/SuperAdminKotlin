@@ -3,6 +3,7 @@ package com.example.superadmin
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.*
@@ -22,10 +23,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.superadmin.ui.theme.SuperAdminTheme
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.LineDataSet
 
 class GraphicActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,24 +48,27 @@ class GraphicActivity : ComponentActivity() {
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .background(ComposeColor.White)
+                .background(ComposeColor.White),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             HeaderSection()
             NotificationBar()
             FilterSection()
-            GraphicContent()
+            Spacer(modifier = Modifier.height(16.dp))
+            GraphicContent() // Contenido gráfico
         }
     }
 
     @Composable
     fun HeaderSection() {
-        val context = LocalContext.current // Obtener el contexto local
+        val context = LocalContext.current
+        var expanded by remember { mutableStateOf(false) }
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            verticalAlignment = Alignment.Top // Cambiar a Alignment.Top
+            verticalAlignment = Alignment.CenterVertically
         ) {
             // Logo SENA
             Image(
@@ -70,7 +76,9 @@ class GraphicActivity : ComponentActivity() {
                 contentDescription = "Logo SENA",
                 modifier = Modifier
                     .size(70.dp)
-                    .clickable { context.startActivity(Intent(context, MainActivity::class.java)) }
+                    .clickable {
+                        context.startActivity(Intent(context, MainActivity::class.java))
+                    }
             )
             Spacer(modifier = Modifier.width(10.dp))
 
@@ -80,45 +88,117 @@ class GraphicActivity : ComponentActivity() {
                 contentDescription = "Logo Etapa Productiva",
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable { context.startActivity(Intent(context, MainActivity::class.java)) }
+                    .clickable {
+                        context.startActivity(Intent(context, MainActivity::class.java))
+                    }
             )
             Spacer(modifier = Modifier.width(8.dp))
 
             // Textos
             Column(
-                modifier = Modifier.clickable { context.startActivity(Intent(context, MainActivity::class.java)) }
+                modifier = Modifier.clickable {
+                    context.startActivity(Intent(context, MainActivity::class.java))
+                }
             ) {
                 Text(
                     "Etapa\nProductiva",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = 13.sp,
                     color = ComposeColor(0xFF009E00),
-                    modifier = Modifier.padding(top = 6.dp)
+                    modifier = Modifier
+                        .padding(top = 6.dp)
+                        .offset(x = (-5).dp)
                 )
+                Spacer(modifier = Modifier.height(15.dp))
                 Text(
                     "Centro de Comercio y Servicios",
-                    fontSize = 12.sp,
+                    fontSize = 14.sp,
                     color = ComposeColor(0xFF009E00),
-                    modifier = Modifier.padding(top = 2.dp)
+                    modifier = Modifier.offset(x = (-30).dp)
                 )
             }
 
             Spacer(modifier = Modifier.weight(1f)) // Para empujar el icono del usuario a la derecha
 
             // Icono de usuario
-            Image(
-                painter = painterResource(id = R.drawable.user_icon),
-                contentDescription = "User Icon",
+            Box(
                 modifier = Modifier
                     .size(45.dp)
-                    .clickable { /* Add action for user icon if needed */ }
-            )
+                    .clickable { expanded = !expanded } // Cambia el estado al hacer clic
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.user_icon),
+                    contentDescription = "User Icon",
+                    modifier = Modifier.size(45.dp)
+                )
+
+                // Menú desplegable
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.width(240.dp) // Ajusta el ancho del menú según sea necesario
+                ) {
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, Perfil_SuperAdmin::class.java))
+                        expanded = false
+                    }) {
+                        Text("Ver perfil")
+                    }
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, MainActivity::class.java))
+                        expanded = false
+                    }) {
+                        Text("Inicio")
+                    }
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, Configuracion::class.java))
+                        expanded = false
+                    }) {
+                        Text("Configuración")
+                    }
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, "Permisos"::class.java))
+                        expanded = false
+                    }) {
+                        Text("Permisos")
+                    }
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, AdministradoresActivity::class.java))
+                        expanded = false
+                    }) {
+                        Text("Administradores")
+                    }
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, InstructorActivity::class.java))
+                        expanded = false
+                    }) {
+                        Text("Instructores")
+                    }
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, ApprenticeActivity::class.java))
+                        expanded = false
+                    }) {
+                        Text("Aprendices")
+                    }
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, GraphicActivity::class.java))
+                        expanded = false
+                    }) {
+                        Text("Gráficas")
+                    }
+                    DropdownMenuItem(onClick = {
+                        // Implementar lógica de cierre de sesión
+                        expanded = false
+                    }) {
+                        Text("Cerrar sesión")
+                    }
+                }
+            }
         }
     }
 
     @Composable
     fun NotificationBar() {
-        val context = LocalContext.current // Obtener el contexto local
+        val context = LocalContext.current
 
         Row(
             modifier = Modifier
@@ -134,10 +214,9 @@ class GraphicActivity : ComponentActivity() {
                 modifier = Modifier
                     .size(60.dp)
                     .clickable {
-                        // Al hacer clic en el icono de notificaciones, iniciar Notificaciones
                         context.startActivity(Intent(context, Notificaciones::class.java))
                     },
-                colorFilter = ColorFilter.tint(ComposeColor.White) // Cambia el color a blanco
+                colorFilter = ColorFilter.tint(ComposeColor.White)
             )
         }
     }
@@ -225,85 +304,79 @@ class GraphicActivity : ComponentActivity() {
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            Text(
-                text = "Año Actual",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly // Distribución uniforme
-            ) {
-                GraphicStats("Pasantía", 150)
-                GraphicStats("Vínculo Laboral", 250)
-                GraphicStats("Contrato de Aprendizaje", 110)
-                GraphicStats("Unidad Productiva", 190)
-                GraphicStats("Proyecto Empresarial", 100)
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            GraphicChartSection()
-        }
-    }
-
-    @Composable
-    fun GraphicChartSection() {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            AndroidView(factory = { context ->
-                PieChart(context).apply {
+            // Gráfica Circular
+            Text("Gráfica Circular de Participación", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = ComposeColor(0xFF009E00))
+            AndroidView(
+                factory = { context ->
+                    PieChart(context).apply {
+                        layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500)
+                    }
+                },
+                update = { pieChart ->
                     val entries = listOf(
-                        PieEntry(150f, "Pasantía"),
-                        PieEntry(250f, "Vínculo"),
-                        PieEntry(110f, "Aprendizaje"),
-                        PieEntry(190f, "Unidad Prod."),
-                        PieEntry(100f, "Proyecto Emp.")
+                        PieEntry(40f, "Participantes A"),
+                        PieEntry(30f, "Participantes B"),
+                        PieEntry(20f, "Participantes C"),
+                        PieEntry(10f, "Participantes D")
                     )
+                    val dataSet = PieDataSet(entries, "Participación").apply {
+                        setColors(intArrayOf(Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW), 255)
+                    }
+                    pieChart.data = PieData(dataSet)
+                    pieChart.invalidate()
+                }
+            )
 
-                    val dataSet = PieDataSet(entries, "Contratos").apply {
-                        colors = listOf(
-                            Color.parseColor("#42A5F5"),
-                            Color.parseColor("#66BB6A"),
-                            Color.parseColor("#FFA726"),
-                            Color.parseColor("#EF5350"),
-                            Color.parseColor("#AB47BC")
-                        )
-                        valueTextSize = 14f
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Gráfica de Barras
+            Text("Gráfica de Barras de Participación", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = ComposeColor(0xFF009E00))
+            AndroidView(
+                factory = { context ->
+                    BarChart(context).apply {
+                        layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500)
+                    }
+                },
+                update = { barChart ->
+                    val entries = listOf(
+                        BarEntry(0f, 10f),
+                        BarEntry(1f, 20f),
+                        BarEntry(2f, 30f),
+                        BarEntry(3f, 40f)
+                    )
+                    val dataSet = BarDataSet(entries, "Participación").apply {
+                        colors = listOf(Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW)
+                    }
+                    barChart.data = BarData(dataSet)
+                    barChart.invalidate()
+                }
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Gráfica de Líneas
+            Text("Gráfica de Líneas de Participación", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = ComposeColor(0xFF009E00))
+            AndroidView(
+                factory = { context ->
+                    LineChart(context).apply {
+                        layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500)
+                    }
+                },
+                update = { lineChart ->
+                    val entries = listOf(
+                        Entry(0f, 15f),
+                        Entry(1f, 25f),
+                        Entry(2f, 20f),
+                        Entry(3f, 35f)
+                    )
+                    val dataSet = LineDataSet(entries, "Participación").apply {
+                        color = Color.BLUE
                         valueTextColor = Color.BLACK
                     }
-
-                    data = PieData(dataSet)
-                    legend.apply {
-                        isEnabled = true
-                        textSize = 14f
-                        horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
-                        verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-                        orientation = Legend.LegendOrientation.HORIZONTAL
-                    }
-
-                    description.isEnabled = false
-                    setUsePercentValues(true)
-                    animateY(1400)
+                    lineChart.data = LineData(dataSet)
+                    lineChart.invalidate()
                 }
-            }, modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp))
-        }
-    }
-
-    @Composable
-    fun GraphicStats(title: String, value: Int) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(8.dp)
-        ) {
-            Text(text = title, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = ComposeColor(0xFF009E00))
-            Text(text = value.toString(), fontSize = 24.sp, color = ComposeColor(0xFF009E00))
+            )
         }
     }
 }

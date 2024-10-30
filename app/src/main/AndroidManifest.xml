@@ -30,7 +30,11 @@
         <activity android:name=".GraphicActivity"/>
         <activity android:name=".Notificaciones"/>
         <activity android:name=".Perfil_Aprendiz"/>
-        <activity android:name=""/>
+        <activity android:name=".Perfil_instructor"/>
+        <activity android:name=".Perfil_Administradores"/>
+        <activity android:name=".Configuracion"/>
+        <activity android:name=".Perfil_SuperAdmin"/>
+        <activity android:name=".Redactar"/>
     </application>
 
 </manifest>
