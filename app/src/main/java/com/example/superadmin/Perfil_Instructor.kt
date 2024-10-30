@@ -12,27 +12,27 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Surface
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-class Perfil_Aprendiz : ComponentActivity() {
+class Perfil_instructor : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -128,60 +128,60 @@ class Perfil_Aprendiz : ComponentActivity() {
                 )
 
                 // Menú desplegable
-                androidx.compose.material.DropdownMenu(
+                DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
                     modifier = Modifier.width(240.dp) // Ajusta el ancho del menú según sea necesario
                 ) {
-                    androidx.compose.material.DropdownMenuItem(onClick = {
+                    DropdownMenuItem(onClick = {
                         context.startActivity(Intent(context, Perfil_SuperAdmin::class.java))
                         expanded = false
                     }) {
                         androidx.compose.material.Text("Ver perfil")
                     }
-                    androidx.compose.material.DropdownMenuItem(onClick = {
+                    DropdownMenuItem(onClick = {
                         context.startActivity(Intent(context, MainActivity::class.java))
                         expanded = false
                     }) {
                         androidx.compose.material.Text("Inicio")
                     }
-                    androidx.compose.material.DropdownMenuItem(onClick = {
-                        context.startActivity(Intent(context, Configuracion::class.java))
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, Configuracion ::class.java))
                         expanded = false
                     }) {
                         androidx.compose.material.Text("Configuración")
                     }
-                    androidx.compose.material.DropdownMenuItem(onClick = {
+                    DropdownMenuItem(onClick = {
                         context.startActivity(Intent(context, "Permisos"::class.java))
                         expanded = false
                     }) {
                         androidx.compose.material.Text("Permisos")
                     }
-                    androidx.compose.material.DropdownMenuItem(onClick = {
+                    DropdownMenuItem(onClick = {
                         context.startActivity(Intent(context, AdministradoresActivity::class.java))
                         expanded = false
                     }) {
                         androidx.compose.material.Text("Administradores")
                     }
-                    androidx.compose.material.DropdownMenuItem(onClick = {
+                    DropdownMenuItem(onClick = {
                         context.startActivity(Intent(context, InstructorActivity::class.java))
                         expanded = false
                     }) {
                         androidx.compose.material.Text("Instructores")
                     }
-                    androidx.compose.material.DropdownMenuItem(onClick = {
+                    DropdownMenuItem(onClick = {
                         context.startActivity(Intent(context, ApprenticeActivity::class.java))
                         expanded = false
                     }) {
                         androidx.compose.material.Text("Aprendices")
                     }
-                    androidx.compose.material.DropdownMenuItem(onClick = {
+                    DropdownMenuItem(onClick = {
                         context.startActivity(Intent(context, GraphicActivity::class.java))
                         expanded = false
                     }) {
                         androidx.compose.material.Text("Gráficas")
                     }
-                    androidx.compose.material.DropdownMenuItem(onClick = {
+                    DropdownMenuItem(onClick = {
                         // Implementar lógica de cierre de sesión
                         expanded = false
                     }) {
@@ -194,7 +194,7 @@ class Perfil_Aprendiz : ComponentActivity() {
 
     @Composable
     fun NotificationBar() {
-        val context = LocalContext.current // Obtener el contexto local
+        val context = LocalContext.current
 
         Row(
             modifier = Modifier
@@ -210,10 +210,9 @@ class Perfil_Aprendiz : ComponentActivity() {
                 modifier = Modifier
                     .size(60.dp)
                     .clickable {
-                        // Al hacer clic en el icono de notificaciones, iniciar NotificationActivity
                         context.startActivity(Intent(context, Notificaciones::class.java))
                     },
-                colorFilter = ColorFilter.tint(Color.White) // Cambia el color a blanco
+                colorFilter = ColorFilter.tint(Color.White)
             )
         }
     }
@@ -224,9 +223,8 @@ class Perfil_Aprendiz : ComponentActivity() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
-                .verticalScroll(rememberScrollState()) // Añade scroll si es necesario
+                .verticalScroll(rememberScrollState())
         ) {
-            // Sección de información del perfil
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -234,36 +232,22 @@ class Perfil_Aprendiz : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.aprendiz),
-                    contentDescription = "Avatar",
+                    painter = painterResource(id = R.drawable.instructor),
+                    contentDescription = "Instructor Avatar",
                     modifier = Modifier
                         .size(100.dp)
                         .padding(bottom = 16.dp)
                 )
 
-                UserProfileField(label = "Nombres", value = "Carolina")
-                UserProfileField(label = "Apellidos", value = "Díaz")
-                UserProfileField(label = "N° identificación", value = "1060435758")
-                UserProfileField(label = "N° ficha", value = "2354781")
-                UserProfileField(label = "Correo Electrónico", value = "carolinadiaz@gmail.com")
-                UserProfileField(label = "Departamento", value = "Cauca")
-                UserProfileField(label = "Municipio", value = "Popayán")
-                UserProfileField(label = "Género", value = "Femenino")
-                UserProfileField(label = "Nivel de Formación", value = "Tecnologo")
-                UserProfileField(label = "Nombre del Programa", value = "Adso")
+                UserProfileField(label = "Nombres", value = "Carlos")
+                UserProfileField(label = "Apellidos", value = "Rodríguez")
+                UserProfileField(label = "N° identificación", value = "1036452789")
+                UserProfileField(label = "Correo Electrónico", value = "carlosrodriguez@sena.edu.co")
+                UserProfileField(label = "Departamento", value = "Valle del Cauca")
+                UserProfileField(label = "Municipio", value = "Cali")
+                UserProfileField(label = "Área de Formación", value = "Desarrollo de Software")
+                UserProfileField(label = "Nombre del Programa", value = "Instructor ADSO")
             }
-
-            // Sección de botones Bitácora y Visita en la misma fila
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly // Espacio entre los botones
-            ) {
-
-            }
-
-            // Dropdown de estado
         }
     }
 
@@ -276,8 +260,8 @@ class Perfil_Aprendiz : ComponentActivity() {
                 fontSize = 16.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White, shape = RoundedCornerShape(8.dp)) // Fondo blanco redondeado
-                    .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp)) // Borde gris redondeado
+                    .background(Color.White, shape = RoundedCornerShape(8.dp))
+                    .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
                     .padding(8.dp)
             )
         }
@@ -298,11 +282,6 @@ class Perfil_Aprendiz : ComponentActivity() {
             )
             Text(text = text)
         }
-    }
-
-
-    private fun DropdownMenuItem(onClick: () -> Unit, interactionSource: @Composable () -> Unit) {
-        TODO("Not yet implemented")
     }
 
     @Preview(showBackground = true)

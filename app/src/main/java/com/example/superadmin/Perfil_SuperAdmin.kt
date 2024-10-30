@@ -10,13 +10,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -26,13 +23,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-class Perfil_Aprendiz : ComponentActivity() {
+class Perfil_SuperAdmin : ComponentActivity() { // Nombre de la clase actualizado
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -51,7 +47,7 @@ class Perfil_Aprendiz : ComponentActivity() {
         ) {
             HeaderSection()
             NotificationBar()
-            MainContent()  // Include this to render the profile content
+            MainContent()  // Sección principal para mostrar el perfil
         }
     }
 
@@ -226,7 +222,7 @@ class Perfil_Aprendiz : ComponentActivity() {
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState()) // Añade scroll si es necesario
         ) {
-            // Sección de información del perfil
+            // Sección de información del perfil del administrador
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -234,7 +230,7 @@ class Perfil_Aprendiz : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.aprendiz),
+                    painter = painterResource(id = R.drawable.aprendiz), // Reemplazar con la imagen del administrador
                     contentDescription = "Avatar",
                     modifier = Modifier
                         .size(100.dp)
@@ -249,21 +245,20 @@ class Perfil_Aprendiz : ComponentActivity() {
                 UserProfileField(label = "Departamento", value = "Cauca")
                 UserProfileField(label = "Municipio", value = "Popayán")
                 UserProfileField(label = "Género", value = "Femenino")
-                UserProfileField(label = "Nivel de Formación", value = "Tecnologo")
-                UserProfileField(label = "Nombre del Programa", value = "Adso")
+                UserProfileField(label = "Rol", value = "Administrador")
+                UserProfileField(label = "Sede", value = "CCyS")
+
+                // Sección de botones Bitácora y Visita en la misma fila
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly // Espacio entre los botones
+                ) {
+                    // Aquí puedes agregar los botones si es necesario
+                }
+
             }
-
-            // Sección de botones Bitácora y Visita en la misma fila
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly // Espacio entre los botones
-            ) {
-
-            }
-
-            // Dropdown de estado
         }
     }
 
@@ -300,14 +295,9 @@ class Perfil_Aprendiz : ComponentActivity() {
         }
     }
 
-
-    private fun DropdownMenuItem(onClick: () -> Unit, interactionSource: @Composable () -> Unit) {
-        TODO("Not yet implemented")
-    }
-
     @Preview(showBackground = true)
     @Composable
     fun DefaultPreview() {
-        MainContent()
+        MainScreen()
     }
 }

@@ -14,6 +14,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -55,6 +59,7 @@ class AdministradoresActivity : ComponentActivity() {
     @Composable
     fun HeaderSection() {
         val context = LocalContext.current
+        var expanded by remember { mutableStateOf(false) }
 
         Row(
             modifier = Modifier
@@ -62,32 +67,34 @@ class AdministradoresActivity : ComponentActivity() {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Logo SENA
             Image(
                 painter = painterResource(id = R.drawable.logo_sena),
                 contentDescription = "Logo SENA",
                 modifier = Modifier
                     .size(70.dp)
                     .clickable {
-                        val intent = Intent(context, MainActivity::class.java)
-                        context.startActivity(intent)
+                        context.startActivity(Intent(context, MainActivity::class.java))
                     }
             )
             Spacer(modifier = Modifier.width(10.dp))
+
+            // Logo Etapa Productiva
             Image(
                 painter = painterResource(id = R.drawable.logo_etapaproductiva),
                 contentDescription = "Logo Etapa Productiva",
                 modifier = Modifier
                     .size(40.dp)
                     .clickable {
-                        val intent = Intent(context, MainActivity::class.java)
-                        context.startActivity(intent)
+                        context.startActivity(Intent(context, MainActivity::class.java))
                     }
             )
             Spacer(modifier = Modifier.width(8.dp))
+
+            // Textos
             Column(
                 modifier = Modifier.clickable {
-                    val intent = Intent(context, MainActivity::class.java)
-                    context.startActivity(intent)
+                    context.startActivity(Intent(context, MainActivity::class.java))
                 }
             ) {
                 Text(
@@ -106,12 +113,83 @@ class AdministradoresActivity : ComponentActivity() {
                     modifier = Modifier.offset(x = (-30).dp)
                 )
             }
-            Spacer(modifier = Modifier.weight(1f))
-            Image(
-                painter = painterResource(id = R.drawable.user_icon),
-                contentDescription = "User Icon",
-                modifier = Modifier.size(45.dp)
-            )
+
+            Spacer(modifier = Modifier.weight(1f)) // Para empujar el icono del usuario a la derecha
+
+            // Icono de usuario
+            Box(
+                modifier = Modifier
+                    .size(45.dp)
+                    .clickable { expanded = !expanded } // Cambia el estado al hacer clic
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.user_icon),
+                    contentDescription = "User Icon",
+                    modifier = Modifier.size(45.dp)
+                )
+
+                // Menú desplegable
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.width(240.dp) // Ajusta el ancho del menú según sea necesario
+                ) {
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, Perfil_SuperAdmin::class.java))
+                        expanded = false
+                    }) {
+                        Text("Ver perfil")
+                    }
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, MainActivity::class.java))
+                        expanded = false
+                    }) {
+                        Text("Inicio")
+                    }
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, Configuracion ::class.java))
+                        expanded = false
+                    }) {
+                        Text("Configuración")
+                    }
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, "Permisos"::class.java))
+                        expanded = false
+                    }) {
+                        Text("Permisos")
+                    }
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, AdministradoresActivity::class.java))
+                        expanded = false
+                    }) {
+                        Text("Administradores")
+                    }
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, InstructorActivity::class.java))
+                        expanded = false
+                    }) {
+                        Text("Instructores")
+                    }
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, ApprenticeActivity::class.java))
+                        expanded = false
+                    }) {
+                        Text("Aprendices")
+                    }
+                    DropdownMenuItem(onClick = {
+                        context.startActivity(Intent(context, GraphicActivity::class.java))
+                        expanded = false
+                    }) {
+                        Text("Gráficas")
+                    }
+                    DropdownMenuItem(onClick = {
+                        // Implementar lógica de cierre de sesión
+                        expanded = false
+                    }) {
+                        Text("Cerrar sesión")
+                    }
+                }
+            }
         }
     }
 
@@ -203,12 +281,15 @@ class AdministradoresActivity : ComponentActivity() {
 
     @Composable
     fun InstructorCard(modifier: Modifier = Modifier) {
+        val context = LocalContext.current // Obtén el contexto de la aplicación
         Column(
             modifier = modifier
                 .padding(8.dp)
                 .border(2.dp, Color(0xFF009E00), shape = MaterialTheme.shapes.medium)
                 .padding(18.dp)
-                .clickable { },
+                .clickable {
+                    context.startActivity(Intent(context, Perfil_Administradores::class.java))
+                },
             horizontalAlignment = Alignment.CenterHorizontally // Alinea horizontalmente al centro
         ) {
             Image(
